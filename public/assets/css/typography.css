@@ -1,0 +1,58 @@
+/*
+  Semantic typography layer: works with Webflow classes.
+  Keeps one h1 per page, logical h2/h3, and body copy in <p>.
+*/
+
+main {
+  display: block;
+}
+
+/* Screen-reader / SEO section labels (no visual change) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Hero: h1 uses existing .main-headline rules from Webflow + overrides */
+h1.main-headline {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Section headings that reuse bio/offerings Webflow h2 styles */
+section.offerings h2,
+section:not(.sitetitle) .w-container > h2 {
+  margin-top: 0;
+}
+
+/* Feature cards: h3 replaces span.bullet-heading; keep visual stack */
+.bullets h3.bullet-heading {
+  margin: 0;
+  font-weight: 500;
+  line-height: 100%;
+}
+
+.bullets > p {
+  margin: 0;
+}
+
+/* Prose callouts as paragraphs */
+p.callout {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Contact landmark: sr-only h2 should not affect layout */
+.contact .sr-only + .contactbutton,
+.contact .sr-only ~ .contactbutton,
+#contact .sr-only + .contactbutton,
+#contact .sr-only ~ .contactbutton {
+  margin-top: 0;
+}

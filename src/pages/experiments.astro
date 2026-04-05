@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Melvin Hogan | Experiments — Interactive prototypes"
+  description="Small interactive builds and browser prototypes: Camo Shader, Wavelength, and more."
+  ogTitle="Melvin Hogan | Experiments"
+  ogDescription="Small interactive builds and browser prototypes worth trying."
+  twitterTitle="Melvin Hogan | Experiments"
+  twitterDescription="Small interactive builds and browser prototypes worth trying."
+  current="experiments"
+>
+  <main id="main-content">
+    <section data-w-id="exp-title" style="opacity:0" class="sitetitle">
+      <div class="w-layout-blockcontainer w-container">
+        <h1 class="main-headline">Experiments</h1>
+      </div>
+    </section>
+    <section class="bio" aria-labelledby="exp-intro-heading">
+      <h2 id="exp-intro-heading" class="sr-only">Introduction</h2>
+      <div class="w-layout-blockcontainer container-13 w-container">
+        <p data-w-id="exp-intro" style="opacity:0" class="callout">
+          Small interactive builds and prototypes worth trying in the browser.
+        </p>
+      </div>
+    </section>
+    <section class="contact" aria-labelledby="exp-links-heading">
+      <div class="w-layout-blockcontainer w-container experiments-links">
+        <h2 id="exp-links-heading" class="sr-only">Experiment links</h2>
+        <a
+          href="https://camoshader.netlify.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contactbutton w-button"
+        >
+          Camo Shader: Image modification tool
+        </a>
+        <a
+          href="https://wavelengthaudio.netlify.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contactbutton w-button"
+        >
+          Wavelength
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

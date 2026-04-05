@@ -1,15 +1,9 @@
-/* Map former Typekit/Proxima/Ambroise stacks to locally hosted Google fonts
-   (Cormorant Garamond + Source Sans Pro + others in google-fonts.css). */
+/* Lora (headings) + Lato (body), self-hosted via google-fonts.css */
 
 body,
 p,
 .callout,
 .contactbutton,
-h1,
-h3,
-h4,
-h5,
-h6,
 label,
 .navigation,
 .button,
@@ -22,20 +16,20 @@ label,
 .link-8,
 .code-embed,
 .text-size-small,
-.packageh2,
-.detailh2,
-.packagetag,
-.packagesheaderbutton,
-.casestudyheader,
 .lightbox-link,
 .nav .text,
 .bullets,
 .coreofferings,
 li {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }
 
+h1,
 h2,
+h3,
+h4,
+h5,
+h6,
 .main-headline,
 .work-title,
 .heading-jumbo,
@@ -44,12 +38,18 @@ h2,
 .heading-17,
 .casestudyheading,
 .packageheading,
+.packageh2,
+.detailh2,
+.packagetag,
+.packagesheaderbutton,
+.casestudyheader,
 .offerings.heading,
 .offerings.bullet {
-  font-family: "Cormorant Garamond", "PT Serif", Georgia, serif !important;
+  font-family: "Lora", Georgia, "Times New Roman", serif !important;
 }
 
-.experiments-links {
+.experiments-links,
+.resources-links {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,6 +57,7 @@ h2,
   padding-bottom: 3rem;
 }
 
-.experiments-links .contactbutton {
+.experiments-links .contactbutton,
+.resources-links .contactbutton {
   margin-top: 0;
 }

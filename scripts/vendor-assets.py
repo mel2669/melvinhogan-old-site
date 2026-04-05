@@ -10,7 +10,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT / "assets"
+ASSETS = ROOT / "public" / "assets"
 FONTS = ASSETS / "fonts"
 IMAGES = ASSETS / "images"
 CSS_DIR = ASSETS / "css"
@@ -96,16 +96,11 @@ def main() -> None:
         )
     patch_webflow_css(wf_src, CSS_DIR / "webflow.bundle.css")
 
-    print("Google Fonts (body + UI stack)…")
+    print("Google Fonts (Lora headings + Lato body)…")
     gf_query = (
         "https://fonts.googleapis.com/css2?"
-        "family=Anton&"
-        "family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&"
-        "family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&"
-        "family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;"
-        "1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&"
-        "family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;"
-        "1,200;1,300;1,400;1,600;1,700;1,900&"
+        "family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&"
+        "family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&"
         "display=swap"
     )
     raw = CSS_DIR / "google-fonts-raw.css"

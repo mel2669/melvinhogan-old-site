@@ -1,0 +1,72 @@
+---
+import type { NavKey } from "../types/nav";
+
+type Props = {
+  current: NavKey;
+  linkedinUrl?: string;
+};
+
+const { current, linkedinUrl = "https://www.linkedin.com/in/mehconsulting/" } = Astro.props;
+
+const contactHref = current === "home" || current === "bio" ? "#contact" : "/#contact";
+---
+
+<section>
+  <div class="w-layout-blockcontainer w-container">
+    <div class="main-navigation">
+      <a
+        href="/"
+        aria-current={current === "home" ? "page" : undefined}
+        class:list={["w-inline-block", { "w--current": current === "home" }]}
+      >
+        <div
+          class="lottie-animation"
+          data-w-id="8b6c4d3e-b94c-b580-ad99-1a654c203d1b"
+          data-animation-type="lottie"
+          data-src="/assets/lottie/logo.json"
+          data-loop="0"
+          data-direction="1"
+          data-autoplay="1"
+          data-is-ix2-target="0"
+          data-renderer="svg"
+          data-default-duration="0"
+          data-duration="4"
+        />
+      </a>
+      <div class="nav">
+        <a
+          href="/bio.html"
+          aria-current={current === "bio" ? "page" : undefined}
+          class:list={["w-inline-block", { "w--current": current === "bio" }]}
+        >
+          <div class="text">about</div>
+        </a>
+        <a
+          href="/experiments.html"
+          aria-current={current === "experiments" ? "page" : undefined}
+          class:list={["w-inline-block", { "w--current": current === "experiments" }]}
+        >
+          <div class="text">experiments</div>
+        </a>
+        <a
+          href="/resources.html"
+          aria-current={current === "resources" ? "page" : undefined}
+          class:list={["w-inline-block", { "w--current": current === "resources" }]}
+        >
+          <div class="text">resources & inspiration</div>
+        </a>
+        <a href={contactHref} class="w-inline-block">
+          <div class="text">contact</div>
+        </a>
+        <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="w-inline-block">
+          <img
+            src="/assets/images/68274b56aa7dc59d6f17a5f2_linkedin.svg"
+            loading="lazy"
+            alt=""
+            class="social"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
