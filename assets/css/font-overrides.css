@@ -48,3 +48,15 @@ h2,
 .offerings.bullet {
   font-family: "Cormorant Garamond", "PT Serif", Georgia, serif !important;
 }
+
+.experiments-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 3rem;
+}
+
+.experiments-links .contactbutton {
+  margin-top: 0;
+}
