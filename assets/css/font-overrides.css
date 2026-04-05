@@ -1,0 +1,50 @@
+/* Map former Typekit/Proxima/Ambroise stacks to locally hosted Google fonts
+   (Cormorant Garamond + Source Sans Pro + others in google-fonts.css). */
+
+body,
+p,
+.callout,
+.contactbutton,
+h1,
+h3,
+h4,
+h5,
+h6,
+label,
+.navigation,
+.button,
+.footer-item,
+.text-field,
+.paragraph-light,
+.paragraph-bigger,
+.paragraph-7,
+.paragraph-6,
+.link-8,
+.code-embed,
+.text-size-small,
+.packageh2,
+.detailh2,
+.packagetag,
+.packagesheaderbutton,
+.casestudyheader,
+.lightbox-link,
+.nav .text,
+.bullets,
+.coreofferings,
+li {
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+h2,
+.main-headline,
+.work-title,
+.heading-jumbo,
+.emphasis,
+.bullet-heading,
+.heading-17,
+.casestudyheading,
+.packageheading,
+.offerings.heading,
+.offerings.bullet {
+  font-family: "Cormorant Garamond", "PT Serif", Georgia, serif !important;
+}
