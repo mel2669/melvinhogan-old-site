@@ -48,13 +48,6 @@ const contactHref = current === "home" || current === "bio" ? "#contact" : "/#co
         >
           <div class="text">experiments</div>
         </a>
-        <a
-          href="/resources.html"
-          aria-current={current === "resources" ? "page" : undefined}
-          class:list={["w-inline-block", { "w--current": current === "resources" }]}
-        >
-          <div class="text">resources & inspiration</div>
-        </a>
         <a href={contactHref} class="w-inline-block">
           <div class="text">contact</div>
         </a>
