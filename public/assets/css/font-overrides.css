@@ -48,7 +48,8 @@ h6,
   font-family: "Lora", Georgia, "Times New Roman", serif !important;
 }
 
-.experiments-links {
+.experiments-links,
+.resources-links {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,6 +57,93 @@ h6,
   padding-bottom: 3rem;
 }
 
-.experiments-links .contactbutton {
+.experiments-links .contactbutton,
+.resources-links .contactbutton {
   margin-top: 0;
+}
+
+/* —— Resources: floating physics arena (matches portfolio-site /resources) —— */
+.resources-page {
+  margin-top: 8px;
+}
+
+.resources-page .callout em {
+  font-style: normal;
+  font-weight: 600;
+  color: rgba(11, 31, 20, 0.55);
+}
+
+.resources-arena {
+  position: relative;
+  width: 100%;
+  min-height: min(78vh, 720px);
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(11, 31, 20, 0.1);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 10px rgba(11, 31, 20, 0.08);
+  isolation: isolate;
+}
+
+.resources-float-btn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  font-family: Oswald, "Arial Narrow", ui-sans-serif, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  color: #0b1f14;
+  background: #ffffff;
+  border: 1px solid rgba(11, 31, 20, 0.1);
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(11, 31, 20, 0.06);
+  will-change: transform;
+  z-index: 1;
+}
+
+.resources-float-btn:hover {
+  text-decoration: none;
+  border-color: rgba(15, 81, 50, 0.28);
+  box-shadow:
+    0 4px 14px rgb(32 52 30 / 0.22),
+    0 0 24px rgb(32 52 30 / 0.28);
+}
+
+.resources-float-btn:focus-visible {
+  outline: 2px solid #0f5132;
+  outline-offset: 3px;
+}
+
+/* prefers-reduced-motion: physics script adds this class */
+.resources-arena--static {
+  min-height: auto;
+  overflow: visible;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-content: flex-start;
+  padding: 20px 16px 24px;
+}
+
+.resources-arena--static .resources-float-btn {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none !important;
+  will-change: auto;
+}
+
+.callout .resources-inline-code {
+  font-size: 0.92em;
+  padding: 0 0.2em;
 }
