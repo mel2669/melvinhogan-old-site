@@ -1,0 +1,354 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { START_YEAR, books, currentlyReading } from "../data/books";
+
+type YearGroup = {
+  year: number;
+  items: typeof books;
+};
+
+function normalizeIsbn(isbn?: string) {
+  if (!isbn) return undefined;
+  const trimmed = isbn.trim();
+  if (!trimmed) return undefined;
+  const normalized = trimmed.replace(/[^0-9Xx]/g, "").toUpperCase();
+  return normalized.length >= 10 ? normalized : undefined;
+}
+
+function openLibraryCoverUrl(isbn?: string) {
+  const n = normalizeIsbn(isbn);
+  if (!n) return undefined;
+  return `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(n)}-L.jpg?default=false`;
+}
+
+function googleBooksCoverUrl(isbn?: string) {
+  const n = normalizeIsbn(isbn);
+  if (!n) return undefined;
+  return `https://books.google.com/books/content?vid=ISBN${encodeURIComponent(n)}&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api`;
+}
+
+function libraryThingCoverUrl(isbn?: string) {
+  const n = normalizeIsbn(isbn);
+  if (!n) return undefined;
+  return `https://covers.librarything.com/devkey/YOUR_KEY/large/isbn/${encodeURIComponent(n)}`;
+}
+
+function worldCatCoverUrl(isbn?: string) {
+  const n = normalizeIsbn(isbn);
+  if (!n) return undefined;
+  return `https://covers.wrln.org/${encodeURIComponent(n)}.jpg`;
+}
+
+const normalized = books
+  .filter((b) => Number.isFinite(b.yearRead) && b.yearRead >= START_YEAR)
+  .slice()
+  .sort((a, b) => b.yearRead - a.yearRead || a.title.localeCompare(b.title));
+
+const years = Array.from(new Set(normalized.map((b) => b.yearRead))).sort((a, b) => b - a);
+
+const groups: YearGroup[] = years.map((year) => ({
+  year,
+  items: normalized.filter((b) => b.yearRead === year),
+}));
+---
+
+<BaseLayout
+  title="Melvin Hogan | Books"
+  description="Books I’ve read, grouped by year."
+  ogTitle="Melvin Hogan | Books"
+  ogDescription="Books I’ve read, grouped by year."
+  twitterTitle="Melvin Hogan | Books"
+  twitterDescription="Books I’ve read, grouped by year."
+  current="books"
+>
+  <main id="main-content">
+    <section data-w-id="books-title" style="opacity:0" class="sitetitle">
+      <div class="w-layout-blockcontainer w-container">
+        <h1 class="main-headline">Books</h1>
+      </div>
+    </section>
+
+    <section class="bio" aria-labelledby="books-intro-heading">
+      <h2 id="books-intro-heading" class="sr-only">Introduction</h2>
+      <div class="w-layout-blockcontainer container-13 w-container">
+        <p data-w-id="books-intro" style="opacity:0" class="callout">
+          A running log of books I’ve finished, grouped by year. Starting in {START_YEAR}.
+        </p>
+      </div>
+    </section>
+
+    <section class="books" aria-labelledby="books-list-heading">
+      <div class="w-layout-blockcontainer w-container">
+        {currentlyReading.length > 0 && (
+          <section class="books-year" aria-labelledby="currently-reading-heading">
+            <div class="books-yearHeader">
+              <h2 id="currently-reading-heading" class="books-yearTitle">Currently Reading</h2>
+              <div class="books-yearCount">
+                {currentlyReading.length} {currentlyReading.length === 1 ? "book" : "books"}
+              </div>
+            </div>
+
+            <div class="books-grid" role="list">
+              {currentlyReading.map((book) => {
+                const title = book.title;
+                const author = book.author ?? null;
+                const label = author ? `${title} — ${author}` : title;
+                const primaryHref = book.amazonUrl;
+                const Tag = primaryHref ? "a" : "div";
+                const tagProps =
+                  primaryHref
+                    ? { href: primaryHref, target: "_blank", rel: "noopener noreferrer" }
+                    : {};
+
+                const coverCandidates = [
+                  book.coverSrc,
+                  openLibraryCoverUrl(book.isbn13),
+                  openLibraryCoverUrl(book.isbn10),
+                  googleBooksCoverUrl(book.isbn13),
+                  googleBooksCoverUrl(book.isbn10),
+                  libraryThingCoverUrl(book.isbn13),
+                  libraryThingCoverUrl(book.isbn10),
+                  worldCatCoverUrl(book.isbn13),
+                  worldCatCoverUrl(book.isbn10),
+                ].filter((value, index, arr): value is string => Boolean(value) && arr.indexOf(value) === index);
+
+                const coverSrc = coverCandidates[0];
+                const coverFallbacks = coverCandidates.slice(1);
+
+                return (
+                  <Tag class="books-card" role="listitem" aria-label={label} {...tagProps}>
+                    {coverSrc ? (
+                      <img
+                        class="books-cover"
+                        src={coverSrc}
+                        alt={book.coverAlt ?? ""}
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                        data-fallbacks={coverFallbacks.join("||")}
+                        onerror="const list=(this.dataset.fallbacks||'').split('||').filter(Boolean);const next=list.shift();if(next){this.dataset.fallbacks=list.join('||');this.src=next;return;}this.style.display='none';this.parentElement?.querySelector('.books-coverFallback')?.classList.remove('visuallyHidden');"
+                      />
+                    ) : (
+                      <div class="books-cover books-coverFallback" aria-hidden="true" />
+                    )}
+                    {coverSrc && (
+                      <div class="books-cover books-coverFallback visuallyHidden" aria-hidden="true" />
+                    )}
+                    <div class="books-meta">
+                      <div class="books-title">{title}</div>
+                      {author && <div class="books-author">{author}</div>}
+                      {book.note && <div class="books-note">{book.note}</div>}
+                    </div>
+                  </Tag>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        <h2 id="books-list-heading" class="sr-only">Books list</h2>
+
+        {groups.length === 0 ? (
+          <div class="books-empty">
+            <p class="callout">
+              No books listed yet. Add entries in <code>src/data/books.ts</code>.
+            </p>
+          </div>
+        ) : (
+          groups.map(({ year, items }) => (
+            <section class="books-year" aria-labelledby={`books-year-${year}`}>
+              <div class="books-yearHeader">
+                <h2 id={`books-year-${year}`} class="books-yearTitle">{year}</h2>
+                <div class="books-yearCount">{items.length} {items.length === 1 ? "book" : "books"}</div>
+              </div>
+
+              <div class="books-grid" role="list">
+                {items.map((book) => {
+                  const title = book.title;
+                  const author = book.author ?? null;
+                  const label = author ? `${title} — ${author}` : title;
+                  const primaryHref = book.amazonUrl;
+                  const Tag = primaryHref ? "a" : "div";
+                  const tagProps =
+                    primaryHref
+                      ? { href: primaryHref, target: "_blank", rel: "noopener noreferrer" }
+                      : {};
+
+                  const coverSrc =
+                    book.coverSrc ??
+                    openLibraryCoverUrl(book.isbn13) ??
+                    openLibraryCoverUrl(book.isbn10) ??
+                    googleBooksCoverUrl(book.isbn13) ??
+                    googleBooksCoverUrl(book.isbn10) ??
+                    libraryThingCoverUrl(book.isbn13) ??
+                    libraryThingCoverUrl(book.isbn10) ??
+                    worldCatCoverUrl(book.isbn13) ??
+                    worldCatCoverUrl(book.isbn10);
+
+                  return (
+                    <Tag class="books-card" role="listitem" aria-label={label} {...tagProps}>
+                      {coverSrc ? (
+                        <img
+                          class="books-cover"
+                          src={coverSrc}
+                          alt={book.coverAlt ?? ""}
+                          loading="lazy"
+                          referrerpolicy="no-referrer"
+                          data-fallbacks={[
+                            openLibraryCoverUrl(book.isbn13),
+                            openLibraryCoverUrl(book.isbn10),
+                            googleBooksCoverUrl(book.isbn13),
+                            googleBooksCoverUrl(book.isbn10),
+                            libraryThingCoverUrl(book.isbn13),
+                            libraryThingCoverUrl(book.isbn10),
+                            worldCatCoverUrl(book.isbn13),
+                            worldCatCoverUrl(book.isbn10),
+                          ]
+                            .filter((value, index, arr): value is string => Boolean(value) && arr.indexOf(value) === index)
+                            .filter((url) => url !== coverSrc)
+                            .join("||")}
+                          onerror="const list=(this.dataset.fallbacks||'').split('||').filter(Boolean);const next=list.shift();if(next){this.dataset.fallbacks=list.join('||');this.src=next;return;}this.style.display='none';this.parentElement?.querySelector('.books-coverFallback')?.classList.remove('visuallyHidden');"
+                        />
+                      ) : (
+                        <div class="books-cover books-coverFallback" aria-hidden="true" />
+                      )}
+                      {coverSrc && (
+                        <div class="books-cover books-coverFallback visuallyHidden" aria-hidden="true" />
+                      )}
+                      <div class="books-meta">
+                        <div class="books-title">{title}</div>
+                        {author && <div class="books-author">{author}</div>}
+                        {book.note && <div class="books-note">{book.note}</div>}
+                      </div>
+                    </Tag>
+                  );
+                })}
+              </div>
+            </section>
+          ))
+        )}
+      </div>
+    </section>
+  </main>
+
+  <style>
+    .books {
+      padding: 0 0 72px;
+    }
+
+    .books-year {
+      margin-top: 28px;
+    }
+
+    .books-yearHeader {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 12px;
+    }
+
+    .books-yearTitle {
+      margin: 0;
+      font-family: Oswald, sans-serif;
+      letter-spacing: 0.02em;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .books-yearCount {
+      opacity: 0.72;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .books-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .books-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+    }
+
+    .books-card {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+      min-height: 220px;
+    }
+
+    .books-card:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.085);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .books-cover {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: 10px;
+      object-fit: cover;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .books-coverFallback {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)),
+        radial-gradient(120% 120% at 20% 15%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+      border: 1px dashed rgba(255, 255, 255, 0.22);
+    }
+
+    .books-meta {
+      display: grid;
+      gap: 4px;
+      align-content: start;
+    }
+
+    .books-title {
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0.01em;
+    }
+
+    .books-author {
+      opacity: 0.78;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .books-note {
+      opacity: 0.86;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .visuallyHidden {
+      display: none;
+    }
+
+    .books-empty code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+        monospace;
+      font-size: 0.95em;
+    }
+  </style>
+</BaseLayout>
+

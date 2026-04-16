@@ -47,7 +47,14 @@ const contactHref = current === "home" || current === "bio" ? "#contact" : "/#co
           class:list={["w-inline-block", { "w--current": current === "experiments" }]}
         >
           <div class="text">experiments</div>
-        
+        </a>
+        <a
+          href="/books.html"
+          aria-current={current === "books" ? "page" : undefined}
+          class:list={["w-inline-block", { "w--current": current === "books" }]}
+        >
+          <div class="text">books</div>
+        </a>
         <a
           href="https://curius.app/melvin-hogan"
           target="_blank"

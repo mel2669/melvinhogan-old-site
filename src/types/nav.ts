@@ -1,1 +1,1 @@
-export type NavKey = "home" | "bio" | "experiments" | "resources";
+export type NavKey = "home" | "bio" | "experiments" | "books" | "resources";
