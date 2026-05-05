@@ -1,5 +1,11 @@
 /* Lora (headings) + Lato (body), self-hosted via google-fonts.css */
 
+.main-navigation .site-logo {
+  display: block;
+  height: 75px;
+  width: auto;
+}
+
 body,
 p,
 .callout,
